@@ -15,6 +15,10 @@ namespace Resturants.Domain.Interfaces
 
         Task<int> Create(Resturant resturant);
 
+        Task Delete(Resturant resturant);
+
+        Task SaveChangers();
+
     }
 }
 

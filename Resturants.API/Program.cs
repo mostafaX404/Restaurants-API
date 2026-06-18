@@ -5,6 +5,8 @@ using Resturants.Application.Extensions;
 using Resturants.Infrastructure.Presistence;
 using Resturants.Infrastructure.Seeders;
 using System.Threading.Tasks;
+using Serilog;
+using Serilog.Events;
 namespace Resturants.API
 {
     public class Program
@@ -18,6 +20,10 @@ namespace Resturants.API
             builder.Services.AddControllers();
             builder.Services.AddInfrastructure(builder.Configuration); 
             builder.Services.AddServicesExtensions();
+            builder.Host.UseSerilog((context,config) =>
+            {
+                config.ReadFrom.Configuration(context.Configuration);
+            });
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())
@@ -32,6 +38,7 @@ namespace Resturants.API
 
             app.UseAuthorization();
 
+            app.UseSerilogRequestLogging();
 
             app.MapControllers();
 
