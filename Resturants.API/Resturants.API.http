@@ -76,3 +76,19 @@ GET {{Resturants.API_HostAddress}}/api/restaurants/{{id}}
 GET {{Resturants.API_HostAddress}}/api/restaurants/{{id}}
 
 ###
+
+@resturantId=0
+POST {{Resturants.API_HostAddress}}/api/restaurants/{returantId}/dishs?resturantId={{resturantId}}
+Content-Type: application/json
+{
+  "name": "Grilled Chicken",
+  "description": "Juicy grilled chicken served with vegetables and rice.",
+  "price": 149.99,
+  "kiloCalories": 650,
+  "ResturantId":
+
+}
+
+
+
+###

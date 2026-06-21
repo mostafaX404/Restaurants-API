@@ -1,12 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
 using Restaurants.Infrastructure.Seeders;
-using Resturants.Infrastructure.Extensions;
+using Resturants.API.Middlewares;
 using Resturants.Application.Extensions;
+using Resturants.Domain.Entities;
+using Resturants.Infrastructure.Extensions;
 using Resturants.Infrastructure.Presistence;
 using Resturants.Infrastructure.Seeders;
-using System.Threading.Tasks;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
+using System.Threading.Tasks;
+using Resturants.API.NewFolder;
 namespace Resturants.API
 {
     public class Program
@@ -15,15 +20,8 @@ namespace Resturants.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            builder.AddPresentation();
 
-            builder.Services.AddControllers();
-            builder.Services.AddInfrastructure(builder.Configuration); 
-            builder.Services.AddServicesExtensions();
-            builder.Host.UseSerilog((context,config) =>
-            {
-                config.ReadFrom.Configuration(context.Configuration);
-            });
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())
@@ -33,12 +31,23 @@ namespace Resturants.API
             }
 
             // Configure the HTTP request pipeline.
+            app.UseMiddleware<GlobalExceptionMiddle>();
+            app.UseMiddleware<TimeLoggingMiddle>();
+
+            app.UseSerilogRequestLogging();
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
             app.UseHttpsRedirection();
 
+            app.MapGroup("api/identity").MapIdentityApi<AppUser>();
+
             app.UseAuthorization();
 
-            app.UseSerilogRequestLogging();
 
             app.MapControllers();
 

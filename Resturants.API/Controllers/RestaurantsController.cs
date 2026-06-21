@@ -15,14 +15,14 @@ namespace Resturants.API.Controllers
     {
 
         [HttpGet("")]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<IEnumerable<ResturantDto>>> GetAll()
         {
             var result = await mediator.Send(new GetAllResturentesQuery());
             return Ok(result);  
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+        public async Task<ActionResult<ResturantDto?>> GetById([FromRoute] int id)
         {
             var result = await mediator.Send( new GetResturantByIdQuery(id));
 
@@ -33,21 +33,21 @@ namespace Resturants.API.Controllers
 
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var result = await mediator.Send(new DeleteResturantCommand(id));
-
-            if (result) return NoContent();
+            await mediator.Send(new DeleteResturantCommand(id));
 
             return NotFound();
         }
 
         [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update([FromRoute] int id , UpdateResturantCommand command)
         {
-            var result = await mediator.Send(command);
-
-            if (result) return NoContent();
+           await mediator.Send(command);
 
             return NotFound();
         }

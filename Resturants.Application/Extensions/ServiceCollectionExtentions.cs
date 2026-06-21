@@ -3,6 +3,7 @@ using Resturants.Application.Resturants;
 using FluentValidation;
 using Resturants.Application.Resturants.Command;
 using MediatR;
+using Resturants.Application.User;
 namespace Resturants.Application.Extensions
 {
     public static class ServiceCollectionExtentions
@@ -14,10 +15,15 @@ namespace Resturants.Application.Extensions
            services.AddMediatR(conf => conf.RegisterServicesFromAssembly(applicationAssembly));
             services.AddAutoMapper(applicationAssembly);
 
+            services.AddAutoMapper(applicationAssembly);
             
             services.AddValidatorsFromAssemblyContaining<CreateResturentCommandValidations>();
-             return services;
 
+            services.AddScoped<IUserContext, UserContext>();
+            services.AddHttpContextAccessor();
+            
+            
+            return services;
         }
     }
 }

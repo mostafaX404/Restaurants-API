@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Resturants.Domain.Entities;
+using Resturants.Domain.Exceptions;
 using Resturants.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -17,7 +19,8 @@ namespace Resturants.Application.Resturants.Query
         {
             ilogger.LogInformation($"getting resturant with id = {{id}}");
 
-            var result = await resturantRepository.GetByIdAsync(request.Id);
+            var result = await resturantRepository.GetByIdAsync(request.Id) 
+                ?? throw  new NotFoundExceptions(nameof(Resturant), request.Id.ToString());
 
             var resturantDto = mapper.Map<ResturantDto>(result);
 

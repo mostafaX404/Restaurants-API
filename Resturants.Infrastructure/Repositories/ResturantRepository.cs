@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Resturants.Domain.Interfaces;
 namespace Resturants.Infrastructure.Repositories
 {
-    internal class ResturantRepository(ResturantDbContext _dbContext) : IResturantRepository
+    public class ResturantRepository(ResturantDbContext _dbContext) : IResturantRepository
     {
         public async Task<int> Create(Resturant resturant)
         {
@@ -27,7 +27,7 @@ namespace Resturants.Infrastructure.Repositories
 
         public async Task<IEnumerable<Resturant>> GetAllAsync()
         {
-            var result = await _dbContext.Resturants.ToListAsync();
+            var result = await _dbContext.Resturants.Include(r=>r.Dishes).ToListAsync();
 
             return result;
         }
