@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Resturants.Domain.Exceptions;
 
-namespace Resturants.Application.User.Commands
+namespace Resturants.Application.User.Commands.UpdateUserDetails
 {
     public class UpdateUserDetailsCommandHandler(ILogger<UpdateUserDetailsCommandHandler> logger ,
         IUserContext userContext , IUserStore<AppUser> userStore) : IRequestHandler<UpdateUserDetailsCommand>

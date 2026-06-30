@@ -21,6 +21,8 @@ namespace Resturants.API
             var builder = WebApplication.CreateBuilder(args);
 
             builder.AddPresentation();
+            //builder.Services.AddServicesExtensions();
+            //builder.Services.AddInfrastructure(builder.Configuration);
 
             var app = builder.Build();
 
@@ -44,7 +46,9 @@ namespace Resturants.API
 
             app.UseHttpsRedirection();
 
-            app.MapGroup("api/identity").MapIdentityApi<AppUser>();
+            app.MapGroup("api/identity")
+                .WithTags("Identity")
+                .MapIdentityApi<AppUser>();
 
             app.UseAuthorization();
 

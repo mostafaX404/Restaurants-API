@@ -8,5 +8,9 @@ namespace Resturants.Domain.Entities
         public DateOnly? DateOfBirth { get; set; }
 
         public string? Nationality { get; set; }
+
+        public List<Resturant> OwndeResturants { get; set; } = [];
+
     }
+
 }
