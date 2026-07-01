@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Resturants.Application.Common;
 using Resturants.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,18 +12,21 @@ using System.Threading.Tasks;
 namespace Resturants.Application.Resturants.Query
 {
     internal class GetAllResturentsHandler (ILogger<GetAllResturentesQuery> ilogger ,
-        IResturantRepository resturantRepository , IMapper mapper): IRequestHandler<GetAllResturentesQuery, IEnumerable<ResturantDto>>
+        IResturantRepository resturantRepository , IMapper mapper): IRequestHandler<GetAllResturentesQuery, PagedResult<ResturantDto>>
     {
        
-        public async Task<IEnumerable<ResturantDto>> Handle(GetAllResturentesQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResult<ResturantDto>> Handle(GetAllResturentesQuery request, CancellationToken cancellationToken)
         {
             ilogger.LogInformation("Getting all resturents");
 
-            var result = await resturantRepository.GetAllAsync();
+            var (resturants,totalCount) = await resturantRepository.GetAllMatchingAsync
+                (request.SearchPhase,request.PageSize,request.PageNumber ,request.SortBy,request.SortDirection);
 
-            var resturantDtos = mapper.Map<IEnumerable<ResturantDto>>(result);
+            var resturantDtos = mapper.Map<IEnumerable<ResturantDto>>(resturants);
 
-            return resturantDtos;
+            var result = new PagedResult<ResturantDto>(resturantDtos, totalCount, request.PageSize, request.PageNumber);
+
+            return result;
         }
     }
 }

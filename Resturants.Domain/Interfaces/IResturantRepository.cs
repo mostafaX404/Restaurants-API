@@ -1,9 +1,6 @@
 ﻿using Resturants.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Resturants.Domain.Constants;
+using Resturants.Application.Common;
 
 namespace Resturants.Domain.Interfaces
 {
@@ -18,6 +15,9 @@ namespace Resturants.Domain.Interfaces
         Task Delete(Resturant resturant);
 
         Task SaveChangers();
+
+        Task<(IEnumerable<Resturant>,int)> GetAllMatchingAsync(string? searchPhase,int PageSize , int PageNumber,string? SortBy ,SortDirection sortDirection );
+
 
     }
 }
